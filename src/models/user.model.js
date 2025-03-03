@@ -95,3 +95,15 @@ userSchema.methods.generateRefreshToken = function () {
 
 // Export the User model
 export const User = mongoose.model("User", userSchema);
+
+
+
+/**
+ * Summary:
+ * - Defines the `User` schema for MongoDB using Mongoose.
+ * - Includes fields like `username`, `email`, `fullName`, `avatar`, `coverImage`, `watchHistory`, `password`, and `refreshToken`.
+ * - Uses a pre-save hook to hash passwords before saving.
+ * - Provides methods for password verification and generating JWT access/refresh tokens.
+ * - Ensures unique and indexed fields for efficient querying.
+ */
+

@@ -44,3 +44,15 @@ const videoSchema = new Schema(
 videoSchema.plugin(mongooseAggregatePaginate); // Add pagination plugin
 
 export const Video = mongoose.model("Video", videoSchema); // Export the Video model
+
+
+
+
+/**
+ * Summary:
+ * - Defines the `Video` schema for MongoDB using Mongoose.
+ * - Stores video-related details like `videoFile`, `thumbnail`, `title`, `description`, `duration`, `views`, and `isPublished`.
+ * - References the `User` model for ownership.
+ * - Uses `mongooseAggregatePaginate` for efficient pagination.
+ * - Includes timestamps for tracking creation and updates.
+ */
