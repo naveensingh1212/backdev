@@ -74,7 +74,7 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
 })
 
 //TODO: toggle like on tweet
-const toggleTweetLike = asynchandler(async (req, res) => {
+const toggleTweetLike = asyncHandler(async (req, res) => {
     const { tweetId } = req.params;
     if (!tweetId) throw new ApiError(400, "Comment Id is required");
   
@@ -108,7 +108,7 @@ const toggleTweetLike = asynchandler(async (req, res) => {
   });
 
 //TODO: get all liked videos by user
-const getLikedVideosByUser = asynchandler(async (req, res) => {
+const getLikedVideosByUser = asyncHandler(async (req, res) => {
     const userId = req.user?._id;
   
     const likedVideos = await User.aggregate([
@@ -191,5 +191,5 @@ export {
     toggleCommentLike,
     toggleTweetLike,
     toggleVideoLike,
-    getLikedVideos
+    getLikedVideosByUser
 }
