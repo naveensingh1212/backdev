@@ -2,14 +2,15 @@ import {Router} from "express"
 import {verifyJWT } from "../middlewares/auth.middleware.js"
 import { registerUser, 
     loginUser, 
-    loggedOut,
+    logoutUser,
     changeCurrentPassword,
     updateAccountDetails,
     getCurrentUser,
     updateUserAvatar, 
     updateUserCoverImage,
     getUserChannelProfile, 
-    getWatchHistory 
+    getWatchHistory, 
+    getUploadedVideos,
     } 
     from "../controllers/user.controller.js"
     
@@ -36,7 +37,7 @@ router.route("/login").post(loginUser)
 
 //secured routes
 
-router.route("/logout").post( verifyJWT, loggedOut)
+router.route("/logout").post( verifyJWT, logoutUser)
 
 
 router.route("/refresh-token").post(refreshAccessToken)
@@ -48,6 +49,7 @@ router.route("/avatar").patch(verifyJWT,upload.single("avatar"),updateUserAvatar
 router.route("/cover-image").patch(verifyJWT,upload.single("coverImage"),updateUserCoverImage)
 router.route("/c/:username").get(verifyJWT,getUserChannelProfile)
 router.route("/history").get(verifyJWT,getWatchHistory)
+router .route("/getUploadedVideo").get(verifyJWT,getUploadedVideos)
 
 
 
