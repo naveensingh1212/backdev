@@ -46,7 +46,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 });
 
 // Publish a Video
-const publishAVideo = asyncHandler(async (req, res) => {
+const publishVideo = asyncHandler(async (req, res) => {
   const { title, description, category, type } = req.body;
   if (!title || !description || !category || !type) throw new ApiError(400, "All fields are required");
 
@@ -183,8 +183,51 @@ const addVideoToWatchHistory = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, "Video added to watch history"));
 });
 
+// Remove Video from Watch History
+const removeVideoFromWatchHistory = asynchandler(async (req, res) => {
+  const { videoId } = req.params;
+  if (!videoId) throw new ApiError(400, "Give correct VideoId");
+
+  const user = await User.findById(req.user._id);
+  let idx = await user.watchHistory.indexOf(videoId);
+
+  if (idx !== -1) {
+    user.watchHistory.splice(idx, 1);
+    try {
+      await user.save();
+    } catch (error) {
+      if (error.name === "VersionError") {
+        // Handle the version conflict, e.g., re-fetch the user and try again
+        const freshUser = await User.findById(req.user._id);
+        freshUser.watchHistory.splice(
+          freshUser.watchHistory.indexOf(videoId),
+          1
+        );
+        await freshUser.save();
+      } else {
+        throw error; // Other types of errors should be thrown as is
+      }
+    }
+  } else throw new ApiError(400, "Video to be deleted does not exists");
+
+  res.status(200).json(new ApiResponse(200, "Video removed Successfully"));
+});
+
+// Clear All Watch History
+const clearAllWatchHistory = asynchandler(async (req, res) => {
+  const userid = req.user?._id;
+  const user = await User.findById(userid);
+
+  if (!user) throw new ApiError(400, "User Not found");
+
+  user.watchHistory = [];
+  await user.save();
+
+  res.status(200).json(new ApiResponse(200, "All Videos removed Successfully"));
+});
+
 export {
-  publishAVideo,
+  publishVideo,
   getVideoById,
   updateVideo,
   deleteVideo,
@@ -193,5 +236,7 @@ export {
   getVideosByCategory,
   getAllRelatedVideos,
   getVideoDetail,
-  addVideoToWatchHistory
+  addVideoToWatchHistory,
+  removeVideoFromWatchHistory,
+  clearAllWatchHistory,
 };
