@@ -34,10 +34,26 @@ const videoSchema = new Schema(
         owner: { 
             type: Schema.Types.ObjectId, // Reference to the owner
             ref: "User" 
-        }
+        },
+        category: {
+            type: String,
+            required: true,
+        },
+          type: {
+            type: String,
+            required: true,
+        },
+          likes: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
     }, 
     {
         timestamps: true // Adds createdAt and updatedAt
+    },
+    {
+        versionKey : false
     }
 );
 
